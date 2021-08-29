@@ -10,7 +10,6 @@ import React from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -18,40 +17,14 @@ import {
   View,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {NavigationContainer} from '@react-navigation/native';
+import HomePage from './src/pages/home';
+import NewsPage from './src/pages/news';
+import ThirdPage from './src/pages/third';
+import ProfilePage from './src/pages/profile';
 
-import Page from './src/pages/index';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 const App: () => Node = () => {
   console.info('hello this is succeed 3');
@@ -61,35 +34,48 @@ const App: () => Node = () => {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const {Navigator, Screen} = createBottomTabNavigator();
+
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <Page />
-    </SafeAreaView>
+    <NavigationContainer>
+      <Navigator
+        initialRouteName="news"
+        screenOptions={({route}) => {
+          return {
+            tabBarIcon({focused, color, size}) {},
+          };
+        }}>
+        <Screen
+          name="home"
+          component={HomePage}
+          options={{
+            title: '首页',
+          }}
+        />
+        <Screen
+          name="news"
+          component={NewsPage}
+          options={{
+            title: '新闻',
+          }}
+        />
+        <Screen
+          name="third"
+          component={ThirdPage}
+          options={{
+            title: '朋友圈',
+          }}
+        />
+        <Screen
+          name="profile"
+          component={ProfilePage}
+          options={{
+            title: '我的',
+          }}
+        />
+      </Navigator>
+    </NavigationContainer>
   );
 };
-
-const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  foo: {
-    color: 'red',
-    fontSize: 30,
-  },
-});
 
 export default App;

@@ -11,8 +11,7 @@ export const fetchNews = async ({page, type}) => {
         is_filter: 1,
       },
     });
-    console.info(res.data.result);
-    return res.data.result.data
+    return res.data.result?.data;
   } catch (e) {
     console.error(e);
   }
