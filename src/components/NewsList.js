@@ -1,17 +1,24 @@
 import React from 'react';
 import {
-  ScrollView,
   FlatList,
   StyleSheet,
   Text,
   View,
   Image,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 
-const NewsList = ({list, onReachBottom, onRefresh, refreshing}) => {
+const NewsList = ({
+  list,
+  onReachBottom,
+  onRefresh,
+  refreshing,
+  onNewsClick,
+}) => {
   const renderItem = ({item}) => {
-    const {imgs = [], title, author, date, url, uniquekey} = item;
+    const {imgs = [], title, author, date, uniquekey} = item;
+    const onItemPress = () => onNewsClick(item);
 
     const titleRow = (
       <View>
@@ -25,11 +32,7 @@ const NewsList = ({list, onReachBottom, onRefresh, refreshing}) => {
           <Text style={styles.date}>{date}</Text>
           <Text style={styles.author}>{author}</Text>
         </View>
-        <Image
-          style={styles.like}
-          source={require('./like.png')}
-          catchtap="handleLikeClick"
-        />
+        <Image style={styles.like} source={require('./like.png')} />
       </View>
     );
 
@@ -78,9 +81,12 @@ const NewsList = ({list, onReachBottom, onRefresh, refreshing}) => {
     );
 
     return (
-      <View key={uniquekey} style={styles.newsItem}>
+      <TouchableOpacity
+        key={uniquekey}
+        style={styles.newsItem}
+        onPress={onItemPress}>
         {imgs.length > 2 ? gt2 : le2}
-      </View>
+      </TouchableOpacity>
     );
   };
 

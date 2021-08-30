@@ -1,11 +1,9 @@
 import React from 'react';
 import {useEffect, useState} from 'react';
 import {categories} from '../config/categories';
-
 import TabsComponent from '../components/Tabs';
 import NewsList from '../components/NewsList';
 import {fetchNews} from '../api/index';
-import {Text} from 'react-native';
 
 // 接口返回空数据时调试用
 const fakeData = [
@@ -55,7 +53,7 @@ const initNewsCollection = tabs.reduce((all, tab) => {
   return all;
 }, {});
 
-const NewsPage = () => {
+const NewsPage = ({navigation}) => {
   const [news, setNews] = useState(initNewsCollection);
   const [activeTabId, setActiveTabId] = useState(tabs[0].id);
   const [refreshing, setRefreshing] = useState(false);
@@ -65,7 +63,6 @@ const NewsPage = () => {
   const currentPage = news[type];
 
   const initNews = async loadNextPage => {
-    console.info('currentPage is', currentPage);
     if (currentPage.news.length && !loadNextPage) {
       console.info(`already fetched of id ${activeTabId}`);
       return;
@@ -135,6 +132,10 @@ const NewsPage = () => {
     initNews();
   };
 
+  const handleNewsClick = newsItem => {
+    navigation.navigate('news-detail', {url: encodeURI(newsItem.url)});
+  };
+
   return (
     <>
       <TabsComponent
@@ -147,6 +148,7 @@ const NewsPage = () => {
         onReachBottom={handleNewsReachBottom}
         onRefresh={handlePullDown}
         refreshing={refreshing}
+        onNewsClick={handleNewsClick}
       />
     </>
   );
